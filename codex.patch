@@ -1,66 +1,101 @@
-diff --git a/Modules/RibbonManagement.bas b/Modules/RibbonManagement.bas
-index b0dd1f10c21e7cf0be5bfb0d537316739a18a4bf..7c2d9b9f10806118d36d0fe0dbdf45f599b90074 100644
---- a/Modules/RibbonManagement.bas
-+++ b/Modules/RibbonManagement.bas
-@@ -67,55 +67,56 @@ Sub OnProdRibbonButton(control As IRibbonControl)
-         
-         Case Is = "btnFontColorRed": SetTextColor 255, 0, 0
-         Case Is = "btnFontColorBlack": SetTextColor 0, 0, 0
-         Case Is = "btnFontColorWhite": SetTextColor 255, 255, 255
+diff --git a/Modules/SheetManagement.bas b/Modules/SheetManagement.bas
+index 0bd22befc432e42d483dd950414326761d1bd90f..1fcf0a8552aed32200fa21af8392ac58c4541d5b 100644
+--- a/Modules/SheetManagement.bas
++++ b/Modules/SheetManagement.bas
+@@ -92,44 +92,81 @@ End Sub
+ Sub HideUnusedColumnsAndRowsInSelected()
      
-     ' Functions
-         Case Is = "btnGoToCorner": GoToCorner
-         Case Is = "btnAutoZoom": SwitchZoom
-         Case Is = "btnAutoFillDown": AutoFillDown
-         Case Is = "btnAutoFillRight": AutoFillRight
-         Case Is = "btnSheetManager": ShowSheetManager
-         Case Is = "btnPrintSettings": OpenPrintSettings
-         Case Is = "btnExtractLinks": ExtractLinks
-         Case Is = "btnProtect": ProtectSheets
-         Case Is = "btnUnprotect": UnlockDocument
-         Case Is = "btnCopyFormula": CopyFormula
-         Case Is = "btnCopyToSheets": CopyToSheets
-         Case Is = "btnHideInterface": HideInterface
-         Case Is = "btnConcatenate": AutoConcatenate
-         Case Is = "btnBorderHorizontal": BorderHorizontal
-         Case Is = "btnBorderVertical": BorderVertical
-         Case Is = "btnSecret": OpenSnake
-         Case Is = "btnTestFunction": TestFunction
-         Case Is = "btnCalculationTime": FormTimeTest.Show
-         Case Is = "btnValuesWorkbook": CreateValueFixedWorkbookCopy
--        Case Is = "btnZoomToWidth": ZoomToWidth
--        Case Is = "btnSwapCells": SwapCells
--        Case Is = "btnHideUnused": HideUnusedColumnsAndRowsInSelected
--        Case Is = "btnDisplaySheetsWindow": DisplaySheetsWindow
--        Case Is = "btnFillRandom": FormRandomGenerator.Show
-+        Case Is = "btnZoomToWidth": ZoomToWidth
-+        Case Is = "btnSwapCells": SwapCells
-+        Case Is = "btnHideUnused": HideUnusedColumnsAndRowsInSelected
-+        Case Is = "btnCollapseAll": CollapseAllGroups
-+        Case Is = "btnDisplaySheetsWindow": DisplaySheetsWindow
-+        Case Is = "btnFillRandom": FormRandomGenerator.Show
-     'Case
-         Case Is = "btnCaseSentence": CaseSentence
-         Case Is = "btnCaseLower": CaseLower
-         Case Is = "btnCaseUpper": CaseUpper
-         Case Is = "btnCaseEachWord": CaseCapitalize
-         Case Is = "btnCaseToogle": CaseToogle
-         
-     'Save/send selection/sheets
-         Case Is = "btnSendRange": SendRange
-         Case Is = "btnSaveRange": SaveRange
-         Case Is = "btnSaveSheets": SaveSheets
-         Case Is = "btnSendSheets": SendSheets
-         Case Is = "btnBodyRange": BodyRange
-         Case Is = "btnFormatTable": CustomFormatTable
-         
-     'PPT Updater
-         Case Is = "btnUpdatePPT": UpdatePPTShapes
-         Case Is = "btnSelectShapePart": SelectPPTShapePart
-         Case Is = "btnSelectShapeGroup": SelectShapeGroup
-         Case Is = "btnSelectTableCell": SelectTableCell
-         Case Is = "btnSelectPPTChart": SelectPPTChart
-         Case Is = "btnSelectThinkCell": SelectThinkCell
-         Case Is = "btnReselectPPTFile": ReselectPPTFile
-         
-     'Custom number formatting
+     Dim sht As Worksheet
+     If ActiveSheet.Cells(ActiveSheet.Rows.Count, ActiveSheet.Columns.Count).EntireColumn.Hidden Then
+         For Each sht In ActiveWindow.SelectedSheets
+             ShowUnusedColumnsAndRowsOnSheet sht
+         Next sht
+     Else
+         For Each sht In ActiveWindow.SelectedSheets
+             HideUnusedColumnsAndRowsOnSheet sht
+         Next sht
+     End If
+     
+ End Sub
+ 
+ Sub HideUnusedColumnsAndRowsOnSheet(sheetRef As Worksheet)
+ 
+     Dim rangeToHide As Range, lastCell As Range
+     Set lastCell = FindLastCellRef(sheetRef) 'sheetRef.Range(FindLastCell(sheetRef.Name))
+     Set rangeToHide = lastCell.Offset(1, 1).Resize(sheetRef.Rows.Count - lastCell.Row, sheetRef.Columns.Count - lastCell.Column)
+     rangeToHide.Columns.Hidden = True
+     rangeToHide.Rows.Hidden = True
+     
+ End Sub
+ 
+-Sub ShowUnusedColumnsAndRowsOnSheet(sheetRef As Worksheet)
+-
+-    Dim rangeToShow As Range, lastCell As Range
+-    Set lastCell = FindLastCellRef(sheetRef) 'sheetRef.Range(FindLastCell(sheetRef.Name))
+-    Set rangeToShow = lastCell.Offset(1, 1).Resize(sheetRef.Rows.Count - lastCell.Row, sheetRef.Columns.Count - lastCell.Column)
+-    rangeToShow.Columns.Hidden = False
+-    rangeToShow.Rows.Hidden = False
+-
+-End Sub
+-
+-Sub DisplaySheetsWindow()
+-    If ActiveWorkbook.Sheets.Count > 16 Then
+-        Application.CommandBars("Workbook Tabs").Controls("More Sheets...").Execute
+-    Else
+-        Application.CommandBars("Workbook Tabs").ShowPopup
++Sub ShowUnusedColumnsAndRowsOnSheet(sheetRef As Worksheet)
++
++    Dim rangeToShow As Range, lastCell As Range
++    Set lastCell = FindLastCellRef(sheetRef) 'sheetRef.Range(FindLastCell(sheetRef.Name))
++    Set rangeToShow = lastCell.Offset(1, 1).Resize(sheetRef.Rows.Count - lastCell.Row, sheetRef.Columns.Count - lastCell.Column)
++    rangeToShow.Columns.Hidden = False
++    rangeToShow.Rows.Hidden = False
++
++End Sub
++
++Sub CollapseAllGroups()
++
++    Dim ws As Worksheet
++    Dim screenUpdatingState As Boolean
++
++    screenUpdatingState = Application.ScreenUpdating
++
++    On Error GoTo Cleanup
++
++    Application.ScreenUpdating = False
++
++    For Each ws In ActiveWorkbook.Worksheets
++        If ws.Visible = xlSheetVisible Then
++            CollapseGroupsOnSheet ws
++        End If
++    Next ws
++
++Cleanup:
++    Application.ScreenUpdating = screenUpdatingState
++    If Err.Number <> 0 Then
++        On Error GoTo 0
++        Err.Raise Err.Number, Err.Source, Err.Description, Err.HelpFile, Err.HelpContext
++    End If
++
++End Sub
++
++Private Sub CollapseGroupsOnSheet(ByVal sheetRef As Worksheet)
++
++    On Error Resume Next
++    With sheetRef.Outline
++        .ShowLevels RowLevels:=1
++        .ShowLevels ColumnLevels:=1
++    End With
++    On Error GoTo 0
++
++End Sub
++
++Sub DisplaySheetsWindow()
++    If ActiveWorkbook.Sheets.Count > 16 Then
++        Application.CommandBars("Workbook Tabs").Controls("More Sheets...").Execute
++    Else
++        Application.CommandBars("Workbook Tabs").ShowPopup
+     End If
+ End Sub
+ 
+ 

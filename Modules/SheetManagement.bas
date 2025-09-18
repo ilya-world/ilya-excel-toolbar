@@ -124,6 +124,43 @@ Sub ShowUnusedColumnsAndRowsOnSheet(sheetRef As Worksheet)
 
 End Sub
 
+Sub CollapseAllGroups()
+
+    Dim ws As Worksheet
+    Dim screenUpdatingState As Boolean
+
+    screenUpdatingState = Application.ScreenUpdating
+
+    On Error GoTo Cleanup
+
+    Application.ScreenUpdating = False
+
+    For Each ws In ActiveWorkbook.Worksheets
+        If ws.Visible = xlSheetVisible Then
+            CollapseGroupsOnSheet ws
+        End If
+    Next ws
+
+Cleanup:
+    Application.ScreenUpdating = screenUpdatingState
+    If Err.Number <> 0 Then
+        On Error GoTo 0
+        Err.Raise Err.Number, Err.Source, Err.Description, Err.HelpFile, Err.HelpContext
+    End If
+
+End Sub
+
+Private Sub CollapseGroupsOnSheet(ByVal sheetRef As Worksheet)
+
+    On Error Resume Next
+    With sheetRef.Outline
+        .ShowLevels RowLevels:=1
+        .ShowLevels ColumnLevels:=1
+    End With
+    On Error GoTo 0
+
+End Sub
+
 Sub DisplaySheetsWindow()
     If ActiveWorkbook.Sheets.Count > 16 Then
         Application.CommandBars("Workbook Tabs").Controls("More Sheets...").Execute
