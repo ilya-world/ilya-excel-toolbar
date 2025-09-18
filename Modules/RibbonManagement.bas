@@ -92,6 +92,7 @@ Sub OnProdRibbonButton(control As IRibbonControl)
         Case Is = "btnZoomToWidth": ZoomToWidth
         Case Is = "btnSwapCells": SwapCells
         Case Is = "btnHideUnused": HideUnusedColumnsAndRowsInSelected
+        Case Is = "btnCollapseAll": CollapseAllGroups
         Case Is = "btnDisplaySheetsWindow": DisplaySheetsWindow
         Case Is = "btnFillRandom": FormRandomGenerator.Show
     'Case
