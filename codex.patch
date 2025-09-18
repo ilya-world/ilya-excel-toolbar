@@ -1,0 +1,66 @@
+diff --git a/Modules/RibbonManagement.bas b/Modules/RibbonManagement.bas
+index b0dd1f10c21e7cf0be5bfb0d537316739a18a4bf..7c2d9b9f10806118d36d0fe0dbdf45f599b90074 100644
+--- a/Modules/RibbonManagement.bas
++++ b/Modules/RibbonManagement.bas
+@@ -67,55 +67,56 @@ Sub OnProdRibbonButton(control As IRibbonControl)
+         
+         Case Is = "btnFontColorRed": SetTextColor 255, 0, 0
+         Case Is = "btnFontColorBlack": SetTextColor 0, 0, 0
+         Case Is = "btnFontColorWhite": SetTextColor 255, 255, 255
+     
+     ' Functions
+         Case Is = "btnGoToCorner": GoToCorner
+         Case Is = "btnAutoZoom": SwitchZoom
+         Case Is = "btnAutoFillDown": AutoFillDown
+         Case Is = "btnAutoFillRight": AutoFillRight
+         Case Is = "btnSheetManager": ShowSheetManager
+         Case Is = "btnPrintSettings": OpenPrintSettings
+         Case Is = "btnExtractLinks": ExtractLinks
+         Case Is = "btnProtect": ProtectSheets
+         Case Is = "btnUnprotect": UnlockDocument
+         Case Is = "btnCopyFormula": CopyFormula
+         Case Is = "btnCopyToSheets": CopyToSheets
+         Case Is = "btnHideInterface": HideInterface
+         Case Is = "btnConcatenate": AutoConcatenate
+         Case Is = "btnBorderHorizontal": BorderHorizontal
+         Case Is = "btnBorderVertical": BorderVertical
+         Case Is = "btnSecret": OpenSnake
+         Case Is = "btnTestFunction": TestFunction
+         Case Is = "btnCalculationTime": FormTimeTest.Show
+         Case Is = "btnValuesWorkbook": CreateValueFixedWorkbookCopy
+-        Case Is = "btnZoomToWidth": ZoomToWidth
+-        Case Is = "btnSwapCells": SwapCells
+-        Case Is = "btnHideUnused": HideUnusedColumnsAndRowsInSelected
+-        Case Is = "btnDisplaySheetsWindow": DisplaySheetsWindow
+-        Case Is = "btnFillRandom": FormRandomGenerator.Show
++        Case Is = "btnZoomToWidth": ZoomToWidth
++        Case Is = "btnSwapCells": SwapCells
++        Case Is = "btnHideUnused": HideUnusedColumnsAndRowsInSelected
++        Case Is = "btnCollapseAll": CollapseAllGroups
++        Case Is = "btnDisplaySheetsWindow": DisplaySheetsWindow
++        Case Is = "btnFillRandom": FormRandomGenerator.Show
+     'Case
+         Case Is = "btnCaseSentence": CaseSentence
+         Case Is = "btnCaseLower": CaseLower
+         Case Is = "btnCaseUpper": CaseUpper
+         Case Is = "btnCaseEachWord": CaseCapitalize
+         Case Is = "btnCaseToogle": CaseToogle
+         
+     'Save/send selection/sheets
+         Case Is = "btnSendRange": SendRange
+         Case Is = "btnSaveRange": SaveRange
+         Case Is = "btnSaveSheets": SaveSheets
+         Case Is = "btnSendSheets": SendSheets
+         Case Is = "btnBodyRange": BodyRange
+         Case Is = "btnFormatTable": CustomFormatTable
+         
+     'PPT Updater
+         Case Is = "btnUpdatePPT": UpdatePPTShapes
+         Case Is = "btnSelectShapePart": SelectPPTShapePart
+         Case Is = "btnSelectShapeGroup": SelectShapeGroup
+         Case Is = "btnSelectTableCell": SelectTableCell
+         Case Is = "btnSelectPPTChart": SelectPPTChart
+         Case Is = "btnSelectThinkCell": SelectThinkCell
+         Case Is = "btnReselectPPTFile": ReselectPPTFile
+         
+     'Custom number formatting
